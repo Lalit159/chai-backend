@@ -16,4 +16,17 @@ app.use(express.json({limit: "16kb"})) // if the incoming JSON payload exceeds 1
 
 app.use(cookieParser()) //access user's cookies
 
+
+
+//Routes import
+import userRouter from './routes/user.routes.js'
+
+// Routers declarations
+//good practise to add versions
+app.use("/api/v1/users/v1", userRouter) // when reaching the route "/users", it will activate the userRouter
+
+
+
+
+
 export {app}

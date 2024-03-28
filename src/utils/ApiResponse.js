@@ -7,3 +7,5 @@ class ApiResponse {
         // >=400 status code denotes an error in web
     }
 }
+
+export {ApiResponse}
