@@ -3,6 +3,8 @@ import { jwt } from 'jsonwebtoken';
 import bcrypt from "bcrypt"
 
 
+
+
 const UserSchema = new Schema(
     {
         username:{
@@ -35,8 +37,10 @@ const UserSchema = new Schema(
             type: String, // cloudinary url
         },
         watchHistory:[
+            {
             type: Schema.Types.ObjectId,
             ref: "Video"
+            }
         ],
         password:{
             type: String,
@@ -52,7 +56,7 @@ const UserSchema = new Schema(
     }
 )
 
-UserSchema.pre("save", asnyc function(next){
+UserSchema.pre("save", async function(next){
     if(!this.isModified("password")){
         return next();
     }
@@ -62,11 +66,13 @@ UserSchema.pre("save", asnyc function(next){
 }) // don't use arrow function, we can't use 'this' in arrow functions
 
 UserSchema.methods.isPasswordCorrect = async function(password){
-    return await bcrypt.compare(password, this.password)
+    return await bcrypt.compare(password, this.password) // bcrypt.compare(password_to_compare, hashed_password)
 }
 
+// JWT token can be sent to the client, typically as part of an HTTP response.
+
 UserSchema.methods.generateAccessToken = function(){
-    return jwt.sign(
+    return jwt.sign(  // jwt.sign(payload: object, secretKey: string, {expiresIn: })
         {
             _id: this._id,
             email: this.email,
